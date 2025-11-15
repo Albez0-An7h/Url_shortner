@@ -11,7 +11,6 @@ const app = express()
 const PORT = process.env.PORT || 8000
 const JWT_SECRET = process.env.JWT_SECRET
 
-// Validate required environment variables
 if (!process.env.MONGO_URI) {
     console.error('MONGO_URI environment variable is not set')
 }
@@ -24,7 +23,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
 
-// Connect to MongoDB before handling requests
 app.use(async (req, res, next) => {
     try {
         await connectMongo(process.env.MONGO_URI)
