@@ -54,7 +54,13 @@ const { handleSigninPage, handleLogout } = require('./controllers/auth')
 app.post('/auth/signin', (req, res) => handleSigninPage(req, res, JWT_SECRET))
 app.get('/logout', handleLogout)
 
-app.listen(PORT, () => {
-    console.log(`Server Started at: ${PORT}`)
-    console.log(`Server url: http://localhost:8000/`)
-})
+
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server Started at: ${PORT}`)
+        console.log(`Server url: http://localhost:${PORT}/`)
+    })
+}
+
+
+module.exports = app
