@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - URL Shortener</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <h1>⚡ URL Shortener</h1>
+            <div class="nav-links">
+                <span style="color: #667eea; font-weight: 600;">Welcome, <%= user.username %>!</span>
+                <a href="/logout" style="margin-left: 20px;">Logout</a>
+            </div>
+        </nav>
+
+        <main>
+            <h2>My Links Dashboard</h2>
+            <p>Manage all your shortened URLs</p>
+
+            <!-- URL Creation Form -->
+            <div class="create-link-section">
+                <h3>Create New Short Link</h3>
+                <form id="dashboardUrlForm">
+                    <div class="form-row">
+                        <input 
+                            type="url" 
+                            id="dashboardUrlInput" 
+                            placeholder="Enter your long URL here..." 
+                            required
+                        />
+                        <button type="submit">Shorten URL</button>
+                    </div>
+                    <div class="private-link-option">
+                        <label>
+                            <input type="checkbox" id="dashboardIsPrivate" />
+                            Make this a private link
+                        </label>
+                        <div id="dashboardPasswordField" class="password-field hidden">
+                            <input 
+                                type="password" 
+                                id="dashboardLinkPassword" 
+                                placeholder="Enter password for private link"
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="dashboard-divider"></div>
+
+            <h3>Your Links</h3>
+            <div id="linksContainer" class="links-container">
+                <p class="loading">Loading your links...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
