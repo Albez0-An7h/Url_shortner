@@ -11,19 +11,31 @@ const app = express()
 const PORT = process.env.PORT || 8000
 const JWT_SECRET = process.env.JWT_SECRET
 
+// Validate required environment variables
+if (!process.env.MONGO_URI) {
+    console.error('MONGO_URI environment variable is not set')
+}
+if (!JWT_SECRET) {
+    console.error('JWT_SECRET environment variable is not set')
+}
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
-app.use(authenticateToken)
 
-connectMongo(process.env.MONGO_URI)
-.then(() => {
-    console.log('Connected to Mongo')
+// Connect to MongoDB before handling requests
+app.use(async (req, res, next) => {
+    try {
+        await connectMongo(process.env.MONGO_URI)
+        next()
+    } catch (error) {
+        console.error('MongoDB connection failed:', error)
+        res.status(500).json({ error: 'Database connection failed' })
+    }
 })
-.catch((err) => {
-    console.error('Error in Mongo: ', err)
-})
+
+app.use(authenticateToken)
 
 app.set("view engine", "ejs")
 app.set("views", path.resolve("./views"))
