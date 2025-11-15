@@ -5,7 +5,7 @@
             "src": "index.js",
             "use": "@vercel/node",
             "config": {
-                "runtime": "nodejs24.x"
+                "runtime": "nodejs22.x"
             }
         }
     ],
