@@ -11,6 +11,13 @@ const app = express()
 const PORT = process.env.PORT || 8000
 const JWT_SECRET = process.env.JWT_SECRET
 
+// Log environment variable status (without exposing values)
+console.log('Environment check:', {
+    MONGO_URI: process.env.MONGO_URI ? 'Set' : 'Missing',
+    JWT_SECRET: JWT_SECRET ? 'Set' : 'Missing',
+    NODE_ENV: process.env.NODE_ENV || 'development'
+})
+
 if (!process.env.MONGO_URI) {
     console.error('MONGO_URI environment variable is not set')
 }
@@ -25,11 +32,17 @@ app.use(cookieParser())
 
 app.use(async (req, res, next) => {
     try {
+        if (!process.env.MONGO_URI) {
+            throw new Error('MONGO_URI not configured')
+        }
         await connectMongo(process.env.MONGO_URI)
         next()
     } catch (error) {
-        console.error('MongoDB connection failed:', error)
-        res.status(500).json({ error: 'Database connection failed' })
+        console.error('MongoDB connection failed:', error.message)
+        res.status(500).json({ 
+            error: 'Database connection failed',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        })
     }
 })
 
